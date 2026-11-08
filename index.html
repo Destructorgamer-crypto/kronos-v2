@@ -89,14 +89,50 @@ h1{font-size:clamp(48px,9vw,110px);letter-spacing:.18em;margin:34px 0 6px;text-a
 .li{display:flex;gap:8px;align-items:center;padding:8px;border:1px solid var(--line);border-radius:9px;margin-top:8px;font-size:12px}
 .li input{flex:1;min-width:0}
 .hint{font-size:11px;color:var(--mut);margin-top:6px;line-height:1.4}
-#chatmsgs{height:calc(100% - 170px);overflow-y:auto;display:flex;flex-direction:column;gap:12px;margin:10px 0}
-.msg{border-left:2px solid var(--ac);padding-left:10px;font-size:13px;word-break:break-word;animation:in .3s}
-.msg b{display:block;font-size:10px;color:var(--mut);margin-bottom:2px}
 #modal{position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(5px);z-index:60;display:none;place-items:center}
 #modal.open{display:grid}
 #modal .box{background:var(--bg2);color:var(--fg);border:1px solid var(--line);border-radius:16px;padding:26px;width:min(340px,92vw);animation:in .3s}
 #toast{position:fixed;bottom:60px;left:50%;transform:translate(-50%,20px);background:var(--ac);color:var(--bg);padding:10px 18px;border-radius:10px;font-size:13px;font-weight:600;opacity:0;transition:.3s;z-index:90;pointer-events:none}
 #toast.show{opacity:1;transform:translate(-50%,0)}
+/* chat */
+#pChat{padding:0;display:flex;flex-direction:column;overflow:hidden}
+.ch-head{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,color-mix(in srgb,var(--ac) 16%,var(--bg2)),var(--bg2))}
+.ch-t{font-weight:700;font-size:17px}
+.ch-s{font-size:11px;color:var(--mut);display:flex;align-items:center;gap:6px;margin-top:3px}
+.ch-s i{width:8px;height:8px;border-radius:50%;background:#3ddc84;box-shadow:0 0 8px #3ddc84;animation:pulse 2s infinite}
+@keyframes pulse{50%{opacity:.3}}
+#chatAuth{flex:1;display:flex;flex-direction:column;justify-content:center;gap:16px;padding:32px}
+#pChat #chatAuth input{padding:13px 16px;border-radius:12px;text-align:center;font-size:15px}
+.av2{width:88px;height:88px;border-radius:50%;margin:0 auto;display:grid;place-items:center;font-size:38px;font-weight:800;color:#fff;background:var(--ac);transition:background .3s,transform .3s}
+#chatMain{display:none;flex:1;flex-direction:column;min-height:0}
+#chatmsgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:3px;scrollbar-width:thin}
+.mg{display:flex;gap:8px;align-items:flex-end;max-width:90%;animation:msgIn .3s both}
+.mg.me{align-self:flex-end;flex-direction:row-reverse}.mg.first{margin-top:12px}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px) scale(.97)}}
+.mav{width:30px;height:30px;border-radius:50%;flex-shrink:0;display:grid;place-items:center;font-size:12px;font-weight:700;color:#fff}
+.mn{font-size:11px;color:var(--mut);margin:0 0 3px 4px;font-weight:600}
+.bub{background:var(--bg);border:1px solid var(--line);padding:8px 12px;border-radius:16px 16px 16px 4px;font-size:13.5px;line-height:1.4;word-break:break-word}
+.me .bub{background:var(--ac);color:var(--bg);border-color:transparent;border-radius:16px 16px 4px 16px}
+.mt{font-size:10px;opacity:.55;margin-left:10px;white-space:nowrap;float:right;padding-top:6px}
+.emo{display:flex;gap:6px;padding:4px 16px 8px}
+.emo button{background:var(--bg);border:1px solid var(--line);border-radius:10px;cursor:pointer;font-size:16px;padding:3px 8px;transition:.15s}.emo button:hover{border-color:var(--ac);transform:translateY(-2px)}
+.ch-in{display:flex;gap:8px;padding:0 16px 10px}
+#pChat .ch-in input{flex:1;padding:12px 16px;border-radius:22px;font-size:14px}
+#cSend{border-radius:50%;width:44px;height:44px;padding:0;flex-shrink:0}
+.cempty{margin:auto;text-align:center;color:var(--mut);font-size:13px;line-height:1.6}
+#badge{background:#ff4444;color:#fff;border-radius:10px;font-size:10px;padding:1px 6px;margin-left:6px;display:none}
+/* dreceres */
+.sc{gap:12px;max-width:1000px;width:100%;padding:0 12px}
+.sc a{position:relative}
+.sc b.x{position:absolute;top:2px;right:14px;width:20px;height:20px;border-radius:50%;background:var(--gtile);color:var(--gmut);font-size:10px;display:none;place-items:center;cursor:pointer}
+.sc a:hover b.x{display:grid}
+#scm{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;place-items:center;z-index:5}#scm.open{display:grid}
+.scb{background:var(--gbg);border-radius:8px;padding:24px;width:min(360px,92vw);box-shadow:0 8px 28px rgba(0,0,0,.35)}
+.scb h3{margin:0 0 12px;font-weight:400;font-size:18px}
+.scb label{display:block;font-size:12px;color:var(--gmut);margin:12px 0 4px}
+.scb input{width:100%;padding:10px;border:1px solid var(--gline);border-radius:4px;background:var(--gbg);color:var(--gfg);font-size:14px;outline:0}.scb input:focus{border-color:#1a73e8}
+.scbt{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}
+.scbt button{background:none;border:0;color:#1a73e8;font-size:14px;padding:8px 14px;border-radius:4px;cursor:pointer}.scbt button:hover{background:rgba(26,115,232,.1)}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -104,27 +140,21 @@ h1{font-size:clamp(48px,9vw,110px);letter-spacing:.18em;margin:34px 0 6px;text-a
 
 <!-- ===== PÁGINA DE INICIO (Google) ===== -->
 <div id="g">
-  <div class="top"><a href="#">Gmail</a><a href="#">Imágenes</a>
+  <div class="top"><a href="#">Gmail</a><a href="#">Imatges</a>
     <div class="ib"><svg width="24" height="24" viewBox="0 0 24 24" fill="#5f6368"><path d="M6 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm6 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm6 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM6 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm6 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm6 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM6 20a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm6 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm6 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg></div>
     <div class="av">A</div></div>
   <div class="mid">
     <img id="glogo" alt="Google" src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png">
     <div id="gbox">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="#9aa0a6"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-      <input id="gin" type="text" autocomplete="off" autofocus placeholder="Busca en Google o escribe una URL">
+      <input id="gin" type="text" autocomplete="off" autofocus placeholder="Cerca a Google o escriu un URL">
       <svg width="22" height="22" viewBox="0 0 24 24"><path fill="#4285f4" d="M12 14c1.66 0 3-1.34 3-3V5a3 3 0 0 0-6 0v6c0 1.66 1.34 3 3 3z"/><path fill="#34a853" d="M11 18.92V22h2v-3.08A7 7 0 0 0 19 12h-2a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92z"/><path fill="#fbbc04" d="M7 12H5c0 .7.1 1.4.4 2l1.5-1.2A5 5 0 0 1 7 12z"/><path fill="#ea4335" d="M17 12h2c0 .7-.1 1.4-.4 2l-1.5-1.2c.1-.2.1-.5.1-.8z"/></svg>
       <svg width="22" height="22" viewBox="0 0 24 24"><path fill="#4285f4" d="M5 15H3v4a2 2 0 0 0 2 2h4v-2H5v-4z"/><path fill="#ea4335" d="M5 5h4V3H5a2 2 0 0 0-2 2v4h2V5z"/><path fill="#fbbc04" d="M19 3h-4v2h4v4h2V5a2 2 0 0 0-2-2z"/><path fill="#34a853" d="M19 19h-4v2h4a2 2 0 0 0 2-2v-4h-2v4z"/><circle cx="12" cy="12" r="3" fill="#4285f4"/></svg>
     </div>
-    <div class="sc">
-      <a href="https://classroom.google.com/"><i><img src="https://www.google.com/s2/favicons?domain=classroom.google.com&sz=64" alt=""></i><span>Classroom</span></a>
-      <a href="https://drive.google.com/"><i><img src="https://www.google.com/s2/favicons?domain=drive.google.com&sz=64" alt=""></i><span>Drive</span></a>
-      <a href="https://mail.google.com/"><i><img src="https://www.google.com/s2/favicons?domain=mail.google.com&sz=64" alt=""></i><span>Gmail</span></a>
-      <a href="https://www.youtube.com/"><i><img src="https://www.google.com/s2/favicons?domain=youtube.com&sz=64" alt=""></i><span>YouTube</span></a>
-      <a href="https://docs.google.com/"><i><img src="https://www.google.com/s2/favicons?domain=docs.google.com&sz=64" alt=""></i><span>Documentos</span></a>
-      <a href="#" onclick="return false"><i>+</i><span>Añadir acceso</span></a>
-    </div>
+    <div class="sc" id="sc"></div>
   </div>
-  <div id="secret"><svg width="18" height="18" viewBox="0 0 24 24" fill="#5f6368"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>Personalizar Chrome</div>
+  <div id="scm"><div class="scb"><h3>Afegeix una drecera</h3><label>Nom</label><input id="scN" type="text" autocomplete="off"><label>URL</label><input id="scU" type="text" placeholder="https://" autocomplete="off"><div class="scbt"><button id="scC">Cancel·la</button><button id="scD">Fet</button></div></div></div>
+  <div id="secret"><svg width="18" height="18" viewBox="0 0 24 24" fill="#5f6368"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>Personalitza Chrome</div>
 </div>
 
 <!-- ===== HUB KRONOS ===== -->
@@ -136,7 +166,7 @@ h1{font-size:clamp(48px,9vw,110px);letter-spacing:.18em;margin:34px 0 6px;text-a
       <span style="font-size:11px;color:var(--mut)">o pulsa CTRL</span>
       <div class="sp"></div>
       <button class="btn" id="bSpot">♫ Spotify</button>
-      <button class="btn" id="bChat">💬 Chat</button>
+      <button class="btn" id="bChat">💬 Chat<span id="badge"></span></button>
       <button class="btn" id="bSet">🎨 Ajustes</button>
       <button class="btn pri" id="bAdmin">ADMIN</button>
     </div>
@@ -170,13 +200,12 @@ h1{font-size:clamp(48px,9vw,110px);letter-spacing:.18em;margin:34px 0 6px;text-a
 
 <!-- Chat -->
 <div class="panel" id="pChat">
-  <h3>Chat <button class="btn" data-close>✕</button></h3>
-  <div id="chatAuth"><label>Apodo</label><input type="text" id="cUser" maxlength="16" placeholder="Tu apodo"><button class="btn pri" id="cGo" style="margin-top:12px;width:100%">Entrar</button></div>
-  <div id="chatMain" style="display:none;height:calc(100% - 60px)">
-    <div id="chatmsgs"></div>
-    <input type="text" id="cIn" maxlength="300" placeholder="Escribe y pulsa Enter">
-    <div class="hint"><span id="cMe"></span> · <a href="#" id="cOut" style="color:var(--ac)">salir</a></div>
-  </div>
+  <div class="ch-head"><div><div class="ch-t">Chat</div><div class="ch-s"><i></i>en directo</div></div><button class="btn" data-close>✕</button></div>
+  <div id="chatAuth"><div id="cAv" class="av2">?</div><div class="ch-t" style="text-align:center">Elige tu apodo</div><input type="text" id="cUser" maxlength="16" placeholder="Tu apodo" autocomplete="off"><button class="btn pri" id="cGo">Entrar al chat</button></div>
+  <div id="chatMain"><div id="chatmsgs"></div>
+    <div class="emo"><button>😂</button><button>🔥</button><button>👍</button><button>💀</button><button>😭</button><button>🎮</button></div>
+    <div class="ch-in"><input type="text" id="cIn" maxlength="300" placeholder="Escribe un mensaje…" autocomplete="off"><button class="btn pri" id="cSend">➤</button></div>
+    <div class="hint" style="padding:0 18px 14px"><span id="cMe"></span> · <a href="#" id="cOut" style="color:var(--ac)">salir</a></div></div>
 </div>
 
 <!-- Spotify -->
@@ -247,11 +276,22 @@ const CODE='kronos';let clicks=0,ct;
 function search(){const v=$('#gin').value.trim();if(!v)return;if(v.toLowerCase()===CODE)return unlock();
   location.href=/^[\w-]+(\.[\w-]+)+(\/.*)?$/.test(v)&&!v.includes(' ')?'https://'+v:'https://www.google.com/search?q='+encodeURIComponent(v)}
 $('#gin').addEventListener('keydown',e=>{if(e.key==='Enter')search()});
+$('#gin').addEventListener('input',e=>{if(e.target.value.trim().toLowerCase()===CODE)unlock()});
 $('#glogo').onclick=()=>{clicks++;clearTimeout(ct);ct=setTimeout(()=>clicks=0,1500);if(clicks>=5)unlock()};
 $('#secret').ondblclick=unlock;
+const SC0=[['Classroom','https://classroom.google.com/'],['Drive','https://drive.google.com/'],['Gmail','https://mail.google.com/'],['YouTube','https://www.youtube.com/'],['Documents','https://docs.google.com/document/'],['Presentacions','https://docs.google.com/presentation/'],['Traductor','https://translate.google.com/']];
+let SC=LS.g('sc',SC0);
+function scRender(){const B=$('#sc');B.innerHTML='';
+ SC.forEach((t,i)=>{const a=document.createElement('a');a.href=t[1];const ic=document.createElement('i'),im=new Image();im.alt='';let h='';try{h=new URL(t[1]).hostname}catch(e){}im.src='https://www.google.com/s2/favicons?domain='+h+'&sz=64';ic.appendChild(im);
+  const sp=document.createElement('span');sp.textContent=t[0];const x=document.createElement('b');x.className='x';x.textContent='✕';x.title='Elimina';
+  x.onclick=e=>{e.preventDefault();e.stopPropagation();SC.splice(i,1);LS.s('sc',SC);scRender()};a.append(ic,sp,x);B.appendChild(a)});
+ if(SC.length<10){const a=document.createElement('a');a.href='#';a.innerHTML='<i>+</i><span>Afegeix una drecera</span>';a.onclick=e=>{e.preventDefault();$('#scN').value=$('#scU').value='';$('#scm').classList.add('open');$('#scN').focus()};B.appendChild(a)}}
+$('#scC').onclick=()=>$('#scm').classList.remove('open');
+$('#scD').onclick=()=>{let u=$('#scU').value.trim(),n=$('#scN').value.trim();if(!u)return;if(!/^[a-z]+:\/\//i.test(u))u='https://'+u;try{n=n||new URL(u).hostname.replace(/^www\./,'')}catch(e){return toast('URL no vàlida')}SC.push([n,u]);LS.s('sc',SC);$('#scm').classList.remove('open');scRender()};
+scRender();
 let opened=false;
 function unlock(){if(opened)return;opened=true;
-  intro(()=>{$('#g').style.display='none';$('#hub').style.display='block';render();rain();setInterval(()=>$('#clock').textContent=new Date().toLocaleTimeString(),1000)})}
+  intro(()=>{$('#gin').value='';$('#g').style.display='none';$('#hub').style.display='block';render();rain();setInterval(()=>$('#clock').textContent=new Date().toLocaleTimeString(),1000)})}
 function intro(done){
  if(matchMedia('(prefers-reduced-motion:reduce)').matches)return done();
  const c=document.createElement('canvas');c.id='intro';c.style.cssText='position:fixed;inset:0;z-index:50;background:#000;opacity:0;transition:opacity .5s';document.body.appendChild(c);requestAnimationFrame(()=>c.style.opacity=1);
@@ -261,7 +301,7 @@ function intro(done){
  const dt=q.getImageData(0,0,W,H).data,st=Math.max(7,Math.round(fs/20)),P=[];
  for(let y=0;y<H;y+=st)for(let i=0;i<W;i+=st)if(dt[(y*W+i)*4+3]>128)P.push({tx:i,ty:y,a:Math.random()*6.283,r:R*(1.1+Math.random()*.8),s:Math.random(),b:Math.random()<.5?'0':'1'});
  const E=u=>u<0?0:u>1?1:u*u*(3-2*u);let t0=null,skip=false,gone=false;
- addEventListener('keydown',()=>skip=true,{once:true});c.onclick=()=>skip=true;
+ setTimeout(()=>addEventListener('keydown',()=>skip=true,{once:true}),700);c.onclick=()=>skip=true;
  function fr(now){t0??=now;const t=skip?9e3:now-t0,th=-1.5708+Math.pow(Math.min(t,3400)/1000,3)*1.1;
   x.globalAlpha=1;x.shadowBlur=0;x.fillStyle=t<3700?'rgba(0,0,0,.22)':'#000';x.fillRect(0,0,W,H);
   const da=1-E((t-2500)/900);
@@ -380,13 +420,35 @@ $('#aExp').onclick=()=>{const t=JSON.stringify({mine:S.mine,names:S.names,favs:S
 $('#aImp').onclick=()=>{const t=prompt('Pega el JSON exportado:');if(!t)return;try{const o=JSON.parse(t);S.mine=o.mine||[];S.names=o.names||{};S.favs=o.favs||[];S.imgs=o.imgs||{};S.hidden=o.hidden||[];LS.s('imgs',S.imgs);LS.s('hidden',S.hidden);LS.s('mine',S.mine);LS.s('names',S.names);LS.s('favs',S.favs);render();adminList();toast('Importado')}catch(e){toast('JSON no válido')}};
 
 /* ---------- Chat ---------- */
-let chatOn=false,last=0;
-async function chatStart(u){$('#chatAuth').style.display='none';$('#chatMain').style.display='block';$('#cMe').textContent=u;await fbReady;if(chatOn||!db)return;chatOn=true;const{ref,push,onChildAdded,query,limitToLast,serverTimestamp}=F;
-  const box=$('#chatmsgs');onChildAdded(query(ref(db,'messages'),limitToLast(25)),s=>{const d=s.val()||{};const m=document.createElement('div');m.className='msg';
-    const b=document.createElement('b');b.textContent=String(d.u||'?').slice(0,16);const t=document.createElement('span');t.textContent=String(d.t||'').slice(0,300);m.append(b,t);box.appendChild(m);
-    while(box.children.length>25)box.removeChild(box.firstChild);box.scrollTop=box.scrollHeight});
-  $('#cIn').onkeydown=e=>{if(e.key!=='Enter')return;const v=e.target.value.trim();if(!v||Date.now()-last<800)return;last=Date.now();push(ref(db,'messages'),{u,t:v.slice(0,300),s:serverTimestamp()}).catch(()=>toast('No se pudo enviar'));e.target.value=''}}
-$('#cGo').onclick=()=>{const u=$('#cUser').value.trim().replace(/[<>]/g,'');if(u.length<3)return toast('Mínimo 3 caracteres');LS.s('cu',u);chatStart(u)};
+let chatOn=false,last=0,me='',prev=null,unread=0,ready=false;
+const ccol=n=>`hsl(${hue(n)} 65% 45%)`;
+function addMsg(d){const box=$('#chatmsgs'),e=box.querySelector('.cempty');if(e)e.remove();
+ const u=String(d.u||'?').slice(0,16),mine=u===me,first=prev!==u;prev=u;
+ const near=box.scrollHeight-box.scrollTop-box.clientHeight<140;
+ const w=document.createElement('div');w.className='mg'+(mine?' me':'')+(first?' first':'');
+ const av=document.createElement('div');av.className='mav';av.style.background=ccol(u);av.textContent=u[0].toUpperCase();
+ if(mine)av.style.display='none';else if(!first)av.style.visibility='hidden';
+ const col=document.createElement('div');
+ if(first&&!mine){const n=document.createElement('div');n.className='mn';n.textContent=u;col.appendChild(n)}
+ const b=document.createElement('div');b.className='bub';b.textContent=String(d.t||'').slice(0,300);
+ const tm=document.createElement('span');tm.className='mt';tm.textContent=d.s?new Date(d.s).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):'';b.appendChild(tm);col.appendChild(b);
+ w.append(av,col);box.appendChild(w);while(box.children.length>60)box.removeChild(box.firstChild);
+ if(near||mine)box.scrollTop=box.scrollHeight;
+ if(ready&&!mine&&!$('#pChat').classList.contains('open')){unread++;$('#badge').textContent=unread;$('#badge').style.display='inline'}}
+async function chatStart(u){me=u;$('#chatAuth').style.display='none';$('#chatMain').style.display='flex';$('#cMe').textContent=u;
+ const box=$('#chatmsgs');if(!box.children.length)box.innerHTML='<div class="cempty">Conectando…</div>';
+ await fbReady;if(chatOn)return;
+ if(!db){box.innerHTML='<div class="cempty">No se pudo conectar con el chat.<br>Comprueba tu conexión.</div>';return}
+ chatOn=true;box.innerHTML='<div class="cempty">Aún no hay mensajes.<br>Escribe el primero 👋</div>';
+ const{ref,push,onChildAdded,query,limitToLast,serverTimestamp}=F;
+ onChildAdded(query(ref(db,'messages'),limitToLast(40)),sn=>addMsg(sn.val()||{}));setTimeout(()=>ready=true,1500);
+ const send=()=>{const i=$('#cIn'),v=i.value.trim();if(!v||Date.now()-last<800)return;last=Date.now();push(ref(db,'messages'),{u:me,t:v.slice(0,300),s:serverTimestamp()}).catch(()=>toast('No se pudo enviar'));i.value='';i.focus()};
+ $('#cIn').onkeydown=e=>{if(e.key==='Enter')send()};$('#cSend').onclick=send}
+$$('.emo button').forEach(b=>b.onclick=()=>{const i=$('#cIn');i.value+=b.textContent;i.focus()});
+$('#cUser').oninput=e=>{const v=e.target.value.trim(),a=$('#cAv');a.textContent=(v[0]||'?').toUpperCase();a.style.background=v?ccol(v):'';a.style.transform='scale(1.08)';setTimeout(()=>a.style.transform='',150)};
+const cGo=()=>{const u=$('#cUser').value.trim().replace(/[<>]/g,'');if(u.length<3)return toast('Mínimo 3 caracteres');LS.s('cu',u);chatStart(u)};
+$('#cGo').onclick=cGo;$('#cUser').addEventListener('keydown',e=>{if(e.key==='Enter')cGo()});
+$('#bChat').addEventListener('click',()=>{unread=0;$('#badge').style.display='none';setTimeout(()=>{const b=$('#chatmsgs');b.scrollTop=b.scrollHeight},60)});
 $('#cOut').onclick=e=>{e.preventDefault();localStorage.removeItem('kr_cu');location.reload()};
 const cu=LS.g('cu','');if(cu)chatStart(cu);
 </script>
