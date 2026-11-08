@@ -213,11 +213,10 @@ h1{font-size:clamp(48px,9vw,110px);letter-spacing:.18em;margin:34px 0 6px;text-a
 </div></div>
 <div id="toast"></div>
 
-<script type="module">
-import{initializeApp}from"https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import{getDatabase,ref,push,onChildAdded,query,limitToLast,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+<script>
 const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
-let db=null;try{db=getDatabase(initializeApp({apiKey:"AIzaSyDHoFU5TiEq0LwsTUc04NifV57n1wDQAHg",authDomain:"indexumchat.firebaseapp.com",databaseURL:"https://indexumchat-default-rtdb.europe-west1.firebasedatabase.app",projectId:"indexumchat",storageBucket:"indexumchat.firebasestorage.app",messagingSenderId:"67069413036",appId:"1:67069413036:web:4725c1f35ae027a9d04109"}))}catch(e){}
+let db=null,F=null;
+const fbReady=Promise.all([import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js'),import('https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js')]).then(([a,b])=>{F=b;db=b.getDatabase(a.initializeApp({apiKey:"AIzaSyDHoFU5TiEq0LwsTUc04NifV57n1wDQAHg",authDomain:"indexumchat.firebaseapp.com",databaseURL:"https://indexumchat-default-rtdb.europe-west1.firebasedatabase.app",projectId:"indexumchat",storageBucket:"indexumchat.firebasestorage.app",messagingSenderId:"67069413036",appId:"1:67069413036:web:4725c1f35ae027a9d04109"}))}).catch(()=>{});
 const LS={g:(k,d)=>{try{return JSON.parse(localStorage.getItem('kr_'+k))??d}catch(e){return d}},s:(k,v)=>{try{localStorage.setItem('kr_'+k,JSON.stringify(v))}catch(e){}}};
 const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('show'),2200)};
 
@@ -248,7 +247,6 @@ const CODE='kronos';let clicks=0,ct;
 function search(){const v=$('#gin').value.trim();if(!v)return;if(v.toLowerCase()===CODE)return unlock();
   location.href=/^[\w-]+(\.[\w-]+)+(\/.*)?$/.test(v)&&!v.includes(' ')?'https://'+v:'https://www.google.com/search?q='+encodeURIComponent(v)}
 $('#gin').addEventListener('keydown',e=>{if(e.key==='Enter')search()});
-$('#gs').onclick=search;$('#gl').onclick=search;
 $('#glogo').onclick=()=>{clicks++;clearTimeout(ct);ct=setTimeout(()=>clicks=0,1500);if(clicks>=5)unlock()};
 $('#secret').ondblclick=unlock;
 let opened=false;
@@ -383,7 +381,7 @@ $('#aImp').onclick=()=>{const t=prompt('Pega el JSON exportado:');if(!t)return;t
 
 /* ---------- Chat ---------- */
 let chatOn=false,last=0;
-function chatStart(u){$('#chatAuth').style.display='none';$('#chatMain').style.display='block';$('#cMe').textContent=u;if(chatOn||!db)return;chatOn=true;
+async function chatStart(u){$('#chatAuth').style.display='none';$('#chatMain').style.display='block';$('#cMe').textContent=u;await fbReady;if(chatOn||!db)return;chatOn=true;const{ref,push,onChildAdded,query,limitToLast,serverTimestamp}=F;
   const box=$('#chatmsgs');onChildAdded(query(ref(db,'messages'),limitToLast(25)),s=>{const d=s.val()||{};const m=document.createElement('div');m.className='msg';
     const b=document.createElement('b');b.textContent=String(d.u||'?').slice(0,16);const t=document.createElement('span');t.textContent=String(d.t||'').slice(0,300);m.append(b,t);box.appendChild(m);
     while(box.children.length>25)box.removeChild(box.firstChild);box.scrollTop=box.scrollHeight});
