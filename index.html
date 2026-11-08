@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nueva pestaña</title>
+<title>Pestanya nova</title>
 <link rel="icon" href="https://www.google.com/favicon.ico">
 <style>
 :root{--bg:#07080c;--bg2:#0f1117;--fg:#e9ecf5;--mut:#7d8499;--ac:#7c5cff;--line:#1c2030}
@@ -94,6 +94,22 @@ h1{font-size:clamp(48px,9vw,110px);letter-spacing:.18em;margin:34px 0 6px;text-a
 #modal .box{background:var(--bg2);color:var(--fg);border:1px solid var(--line);border-radius:16px;padding:26px;width:min(340px,92vw);animation:in .3s}
 #toast{position:fixed;bottom:60px;left:50%;transform:translate(-50%,20px);background:var(--ac);color:var(--bg);padding:10px 18px;border-radius:10px;font-size:13px;font-weight:600;opacity:0;transition:.3s;z-index:90;pointer-events:none}
 #toast.show{opacity:1;transform:translate(-50%,0)}
+/* pánico + disfraz */
+#pd{position:fixed;inset:0;z-index:200;background:#f9fbfd;color:#1f1f1f;display:none;flex-direction:column;font-family:Roboto,Arial,sans-serif;cursor:default}
+#pd.open{display:flex}
+.pd-h{display:flex;align-items:center;gap:12px;padding:8px 16px 0}
+.pd-tt{font-size:18px;line-height:24px;padding:0 6px;border-radius:4px}.pd-tt:hover{background:#e8eaed}
+.pd-menu{display:flex;gap:2px;font-size:13px}.pd-menu span{padding:3px 8px;border-radius:4px}.pd-menu span:hover{background:#e8eaed}
+.pd-sp{flex:1}.pd-share{background:#c2e7ff;color:#001d35;border-radius:20px;padding:9px 20px;font-size:14px;font-weight:500}
+.pd-av{width:32px;height:32px;border-radius:50%;background:#1a73e8;color:#fff;display:grid;place-items:center;font-size:14px}
+.pd-tb{display:flex;align-items:center;gap:14px;margin:8px 16px;padding:7px 18px;background:#edf2fa;border-radius:24px;font-size:13px;color:#444;overflow:hidden;white-space:nowrap}
+.pd-sep{width:1px;height:20px;background:#c7c7c7}
+.pd-scroll{flex:1;overflow-y:auto;display:flex;justify-content:center;padding:16px 0 40px}
+#pdBody{background:#fff;width:min(816px,94vw);min-height:1056px;padding:96px;box-shadow:0 0 0 1px #dadce0;outline:0;font:11pt/1.5 Arial,sans-serif;color:#000;height:max-content}
+#pdBody h1{font-size:20pt;font-weight:400;margin:0 0 .6em}#pdBody p{margin:0 0 .9em;text-align:justify}
+.cloaks{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.cl{display:flex;align-items:center;gap:8px;font-size:12px;padding:7px 9px}.cl img{width:16px;height:16px}
+#mList .li b{color:var(--ac)}
 /* chat */
 #pChat{padding:0;display:flex;flex-direction:column;overflow:hidden}
 .ch-head{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,color-mix(in srgb,var(--ac) 16%,var(--bg2)),var(--bg2))}
@@ -163,7 +179,7 @@ h1{font-size:clamp(48px,9vw,110px);letter-spacing:.18em;margin:34px 0 6px;text-a
   <div class="wrap">
     <div class="bar">
       <button class="btn" id="bPanic" title="Pulsa CTRL">⚠ EMERGENCIA</button>
-      <span style="font-size:11px;color:var(--mut)">o pulsa CTRL</span>
+      <span style="font-size:11px;color:var(--mut)">o pulsa ESC</span>
       <div class="sp"></div>
       <button class="btn" id="bSpot">♫ Spotify</button>
       <button class="btn" id="bChat">💬 Chat<span id="badge"></span></button>
@@ -193,8 +209,15 @@ h1{font-size:clamp(48px,9vw,110px);letter-spacing:.18em;margin:34px 0 6px;text-a
   <div class="row"><input type="color" id="accent" value="#7c5cff"><button class="btn" id="accReset">Restablecer</button></div>
   <label>Lluvia binaria de fondo</label>
   <div class="row"><div class="sw2" id="swRain"></div></div>
-  <label>Redirección de emergencia</label>
-  <input type="text" id="panicUrl" placeholder="https://classroom.google.com/">
+  <label>Disfraz de pestaña (hub y ventanas de juego)</label>
+  <div class="cloaks" id="cloaks"></div>
+  <input type="text" id="clT" placeholder="…o un título propio" style="margin-top:8px">
+  <input type="text" id="clI" placeholder="Web del icono (ej. wikipedia.org)" style="margin-top:8px">
+  <label>Tecla de pánico: ESC</label>
+  <div class="row"><button class="btn" id="pmDoc">Documento falso</button><button class="btn" id="pmGo">Redirigir</button><button class="btn" id="pTest">Probar</button></div>
+  <input type="text" id="panicUrl" placeholder="https://classroom.google.com/" style="margin-top:8px">
+  <div class="hint">Documento falso: Esc tapa todo con un Google Docs editable; Esc otra vez lo quita. Redirigir: Esc te lleva a la dirección de arriba.</div>
+  <div class="row" style="margin-top:12px"><div class="sw2" id="swPanicBlur"></div><span style="font-size:12px">Activar también al salir de la pestaña</span></div>
   <button class="btn" style="margin-top:18px;width:100%" id="resetAll">Borrar datos guardados</button>
 </div>
 
@@ -230,6 +253,11 @@ h1{font-size:clamp(48px,9vw,110px);letter-spacing:.18em;margin:34px 0 6px;text-a
   <label>Gestionar juegos (nombre, imagen, eliminar)</label>
   <input type="text" id="aFilter" placeholder="Filtrar…">
   <div id="aList"></div>
+  <label>Moderar chat</label>
+  <div class="row"><button class="btn" id="mClear">Vaciar chat</button></div>
+  <div id="mList"></div>
+  <div class="hint">🗑 borra el mensaje · 🚫 bloquea ese apodo. Los bloqueados aparecen abajo para poder desbloquearlos.</div>
+  <div id="mBan"></div>
   <label>Copia de seguridad</label>
   <div class="row"><button class="btn" id="aExp">Exportar</button><button class="btn" id="aImp">Importar</button></div>
   <div class="hint">Los juegos que añades se guardan en este navegador. Exporta el JSON para llevártelos a otro dispositivo.</div>
@@ -241,6 +269,16 @@ h1{font-size:clamp(48px,9vw,110px);letter-spacing:.18em;margin:34px 0 6px;text-a
   <div class="row" style="margin-top:14px"><button class="btn pri" id="mOk" style="flex:1">Entrar</button><button class="btn" id="mNo">Cancelar</button></div>
 </div></div>
 <div id="toast"></div>
+<div id="pd"><div class="pd-h">
+  <svg width="28" height="38" viewBox="0 0 24 32"><path fill="#4285f4" d="M2 0h13l9 9v21a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2z"/><path fill="#a1c2fa" d="M15 0l9 9h-7a2 2 0 0 1-2-2z"/><path fill="#fff" d="M5 15h14v2H5zm0 4h14v2H5zm0 4h9v2H5z"/></svg>
+  <div><div class="pd-tt">Treball de recerca: la Revolució Industrial</div><div class="pd-menu"><span>Fitxer</span><span>Edita</span><span>Visualitza</span><span>Insereix</span><span>Format</span><span>Eines</span><span>Extensions</span><span>Ajuda</span></div></div>
+  <div class="pd-sp"></div><div class="pd-share">Comparteix</div><div class="pd-av">A</div></div>
+  <div class="pd-tb"><span>↶</span><span>↷</span><span>⎙</span><i class="pd-sep"></i><span>100%</span><i class="pd-sep"></i><span>Text normal ▾</span><i class="pd-sep"></i><span>Arial ▾</span><i class="pd-sep"></i><span>− 11 +</span><i class="pd-sep"></i><b>B</b><i>I</i><u>U</u><span>A</span></div>
+  <div class="pd-scroll"><div id="pdBody" contenteditable="true" spellcheck="false"><h1>La Revolució Industrial a Catalunya</h1>
+  <p>La Revolució Industrial va començar a Gran Bretanya a mitjan segle XVIII i es va estendre progressivament per Europa. A Catalunya, el procés es va iniciar a principis del segle XIX, impulsat sobretot pel sector tèxtil i per l’arribada de la màquina de vapor.</p>
+  <p>Les primeres fàbriques es van instal·lar a Barcelona i a les conques del Llobregat i del Ter, on es podia aprofitar l’energia hidràulica. Les colònies industrials van ser un model particular: els obrers vivien i treballaven en un mateix espai propietat de l’empresari.</p>
+  <p>Entre les conseqüències d’aquest canvi destaquen el creixement de les ciutats, el naixement del moviment obrer i l’aparició de noves classes socials. A continuació analitzarem cadascun d’aquests aspectes amb més detall.</p></div></div>
+</div>
 
 <script>
 const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
@@ -268,7 +306,7 @@ function cover(g,th){const h=hue(g.n),u=finalUrl(g.u),sid=scratchId(g.u);let hos
 async function fetchCover(u){try{const r=await fetch('https://api.microlink.io/?url='+encodeURIComponent(finalUrl(u)));const j=await r.json();return(j.data&&j.data.image&&j.data.image.url)||null}catch(e){return null}}
 
 /* ---------- Estado ---------- */
-let S={favs:LS.g('favs',[]),mine:LS.g('mine',[]),names:LS.g('names',{}),theme:LS.g('theme','dark'),acc:LS.g('acc',''),rain:LS.g('rain',true),panic:LS.g('panic','https://classroom.google.com/'),spot:LS.g('spot','https://open.spotify.com/playlist/6hfxHDFSpmrx2EeA7JKwjv'),imgs:LS.g('imgs',{}),hidden:LS.g('hidden',[])};
+let S={favs:LS.g('favs',[]),mine:LS.g('mine',[]),names:LS.g('names',{}),theme:LS.g('theme','dark'),acc:LS.g('acc',''),rain:LS.g('rain',true),panic:LS.g('panic','https://classroom.google.com/'),cloak:LS.g('cloak',{k:'newtab',t:'',i:''}),pmode:LS.g('pmode','doc'),pblur:LS.g('pblur',false),spot:LS.g('spot','https://open.spotify.com/playlist/6hfxHDFSpmrx2EeA7JKwjv'),imgs:LS.g('imgs',{}),hidden:LS.g('hidden',[])};
 const all=()=>[...BASE.map(g=>({...g,k:g.u,own:0})),...S.mine.map(g=>({...g,k:g.u,own:1}))].filter(g=>!S.hidden.includes(g.k)).map(g=>({...g,n:S.names[g.k]||g.n,i:S.imgs[g.k]||g.i}));
 
 /* ---------- Inicio y desbloqueo ---------- */
@@ -291,7 +329,7 @@ $('#scD').onclick=()=>{let u=$('#scU').value.trim(),n=$('#scN').value.trim();if(
 scRender();
 let opened=false;
 function unlock(){if(opened)return;opened=true;
-  intro(()=>{$('#gin').value='';$('#g').style.display='none';$('#hub').style.display='block';render();rain();setInterval(()=>$('#clock').textContent=new Date().toLocaleTimeString(),1000)})}
+  intro(()=>{$('#gin').value='';applyCloak();$('#g').style.display='none';$('#hub').style.display='block';render();rain();setInterval(()=>$('#clock').textContent=new Date().toLocaleTimeString(),1000)})}
 function intro(done){
  if(matchMedia('(prefers-reduced-motion:reduce)').matches)return done();
  const c=document.createElement('canvas');c.id='intro';c.style.cssText='position:fixed;inset:0;z-index:50;background:#000;opacity:0;transition:opacity .5s';document.body.appendChild(c);requestAnimationFrame(()=>c.style.opacity=1);
@@ -323,9 +361,22 @@ function intro(done){
   requestAnimationFrame(fr)}
  requestAnimationFrame(fr)}
 
-/* ---------- Pánico ---------- */
-const panic=()=>location.replace(S.panic||'https://classroom.google.com/');
-$('#bPanic').onclick=panic;addEventListener('keydown',e=>{if(e.key==='Control'&&opened)panic()});
+/* ---------- Pánico y disfraz de pestaña ---------- */
+const CL=[['newtab','Pestanya nova',"Pestanya nova",'google.com'],['classroom','Classroom','Classroom','classroom.google.com'],['drive','Drive','El meu disc - Google Drive','drive.google.com'],['docs','Documents','Document sense títol - Documents de Google','docs.google.com'],['gmail','Gmail',"Safata d'entrada - Gmail",'mail.google.com'],['wiki','Viquipèdia',"Viquipèdia, l'enciclopèdia lliure",'ca.wikipedia.org'],['desmos','Desmos','Desmos | Calculadora gràfica','desmos.com'],['khan','Khan Academy','Khan Academy','khanacademy.org']];
+const favUrl=d=>'https://www.google.com/s2/favicons?domain='+String(d).replace(/^https?:\/\//,'').split('/')[0]+'&sz=64';
+function cloak(){const c=S.cloak;if(c.k==='custom')return{t:c.t||'Pestanya nova',i:favUrl(c.i||'google.com')};const p=CL.find(x=>x[0]===c.k)||CL[0];return{t:p[2],i:favUrl(p[3])}}
+function setIcon(u){let l=document.querySelector('link[rel~=icon]');if(!l){l=document.createElement('link');l.rel='icon';document.head.appendChild(l)}l.href=u}
+function applyCloak(){const c=cloak();document.title=c.t;setIcon(c.i);$$('.cl').forEach(b=>b.classList.toggle('on',b.dataset.k===S.cloak.k))}
+const hubOn=()=>$('#hub').style.display==='block';let pOn=false;
+function panic(){if(!hubOn())return;
+ if(S.pmode==='go'){location.replace(S.panic||'https://classroom.google.com/');return}
+ pOn=!pOn;$('#pd').classList.toggle('open',pOn);
+ if(pOn){closeAll();$('#modal').classList.remove('open');if(document.activeElement)document.activeElement.blur();document.title='Treball de recerca - Documents de Google';setIcon(favUrl('docs.google.com'));setTimeout(()=>$('#pdBody').focus(),60)}
+ else applyCloak()}
+$('#bPanic').onclick=panic;
+addEventListener('keydown',e=>{if(e.key==='Escape'&&hubOn()&&!e.repeat){e.preventDefault();panic()}});
+addEventListener('blur',()=>{if(S.pblur&&hubOn()&&!pOn)panic()});
+document.addEventListener('visibilitychange',()=>{if(S.pblur&&document.hidden&&hubOn()&&!pOn)panic()});
 
 /* ---------- Render ---------- */
 let tab='all';
@@ -347,7 +398,7 @@ $$('.tabs .btn').forEach(b=>b.onclick=()=>{if(b.dataset.t==='rand'){const L=all(
 /* ---------- Abrir en about:blank ---------- */
 function launch(g){const u=finalUrl(g.u);const w=open('about:blank','_blank');
   if(!w){toast('Permite las ventanas emergentes para abrir juegos');return}
-  const d=w.document;d.title='Documento sin título - Documentos de Google';
+  const d=w.document,cl=cloak();d.title=cl.t;const lk=d.createElement('link');lk.rel='icon';lk.href=cl.i;d.head.appendChild(lk);
   d.body.style.cssText='margin:0;background:#000;overflow:hidden';
   const f=d.createElement('iframe');f.src=u;f.allow='autoplay; fullscreen; keyboard; gamepad; clipboard-write; encrypted-media';f.allowFullscreen=true;
   f.style.cssText='position:fixed;inset:0;width:100%;height:100%;border:0';d.body.appendChild(f)}
@@ -374,6 +425,12 @@ $('#accReset').onclick=()=>{S.acc='';LS.s('acc','');theme()};
 const tg=(el,k,cb)=>{const f=()=>$(el).classList.toggle('on',!!S[k]);f();$(el).onclick=()=>{S[k]=!S[k];LS.s(k,S[k]);f();cb&&cb()}};
 tg('#swRain','rain',()=>{$('#bg').style.display=S.rain?'block':'none'});
 $('#panicUrl').value=S.panic;$('#panicUrl').onchange=e=>{S.panic=e.target.value.trim()||'https://classroom.google.com/';LS.s('panic',S.panic);toast('Guardado')};
+CL.forEach(p=>{const b=document.createElement('button');b.className='btn cl';b.dataset.k=p[0];const im=new Image();im.src=favUrl(p[3]);b.append(im,p[1]);b.onclick=()=>{S.cloak={k:p[0],t:'',i:''};LS.s('cloak',S.cloak);$('#clT').value=$('#clI').value='';applyCloak()};$('#cloaks').appendChild(b)});
+const clSave=()=>{const t=$('#clT').value.trim(),i=$('#clI').value.trim();S.cloak=(t||i)?{k:'custom',t,i}:{k:'newtab',t:'',i:''};LS.s('cloak',S.cloak);applyCloak()};
+$('#clT').onchange=clSave;$('#clI').onchange=clSave;if(S.cloak.k==='custom'){$('#clT').value=S.cloak.t;$('#clI').value=S.cloak.i}
+const pmUI=()=>{$('#pmDoc').classList.toggle('on',S.pmode==='doc');$('#pmGo').classList.toggle('on',S.pmode==='go')};
+$('#pmDoc').onclick=()=>{S.pmode='doc';LS.s('pmode','doc');pmUI()};$('#pmGo').onclick=()=>{S.pmode='go';LS.s('pmode','go');pmUI()};pmUI();
+tg('#swPanicBlur','pblur');$('#pTest').onclick=()=>{closeAll();panic()};
 $('#resetAll').onclick=()=>{if(confirm('¿Borrar favoritos, juegos añadidos y ajustes?')){Object.keys(localStorage).filter(k=>k.startsWith('kr_')).forEach(k=>localStorage.removeItem(k));location.reload()}};
 theme();
 
@@ -392,7 +449,7 @@ let adminOK=false;
 $('#bAdmin').onclick=()=>{if(adminOK)return openP('#pAdmin');$('#mPass').value='';$('#modal').classList.add('open');$('#mPass').focus()};
 $('#mNo').onclick=()=>$('#modal').classList.remove('open');
 async function tryPass(){if(!crypto.subtle)return toast('Abre la web desde https o archivo local');
-  if(await sha($('#mPass').value)===HASH){adminOK=true;$('#modal').classList.remove('open');closeAll();$('#pAdmin').classList.add('open');adminList()}
+  if(await sha($('#mPass').value)===HASH){adminOK=true;$('#modal').classList.remove('open');closeAll();$('#pAdmin').classList.add('open');adminList();feed().then(ok=>{if(ok)modList();else $('#mList').innerHTML='<div class="hint">No se pudo conectar con Firebase.</div>'})}
   else{toast('Contraseña incorrecta');$('#mPass').value=''}}
 $('#mOk').onclick=tryPass;$('#mPass').addEventListener('keydown',e=>{if(e.key==='Enter')tryPass()});
 $('#aUrl').oninput=e=>{const n=nameFromUrl(e.target.value.trim());if(n&&!$('#aName').dataset.m)$('#aName').value=n};
@@ -416,6 +473,15 @@ function adminList(){if(!adminOK)return;const f=$('#aFilter').value.toLowerCase(
  if(M.length>60){const h=document.createElement('div');h.className='hint';h.textContent='Mostrando 60 de '+M.length+'. Usa el filtro para ver el resto.';L.appendChild(h)}
  if(S.hidden.length){const b=document.createElement('button');b.className='btn';b.style.marginTop='10px';b.textContent='Restaurar '+S.hidden.length+' eliminados';b.onclick=()=>{S.hidden=[];LS.s('hidden',[]);render();adminList()};L.appendChild(b)}}
 $('#aFilter').oninput=adminList;
+function modList(){if(!adminOK||!F)return;const L=$('#mList');L.innerHTML='';const arr=[...MSG.values()].slice(-30).reverse();
+ if(!arr.length)L.innerHTML='<div class="hint">Sin mensajes.</div>';
+ arr.forEach(d=>{const r=document.createElement('div');r.className='li';r.style.alignItems='flex-start';
+  const t=document.createElement('div');t.style.cssText='flex:1;min-width:0;word-break:break-word';const b=document.createElement('b');b.textContent=d.u+': ';t.append(b,document.createTextNode(String(d.t||'').slice(0,120)));
+  const x=document.createElement('button');x.className='btn';x.textContent='🗑';x.title='Borrar mensaje';x.onclick=()=>F.remove(F.ref(db,'messages/'+d.k)).catch(()=>toast('Firebase no permite borrar (revisa las reglas)'));
+  const bn=document.createElement('button');bn.className='btn';bn.textContent='🚫';bn.title='Bloquear a '+d.u;bn.onclick=()=>F.set(F.ref(db,'banned/'+bk(d.u)),true).then(()=>toast('Bloqueado: '+d.u)).catch(()=>toast('Firebase no permite escribir (revisa las reglas)'));
+  r.append(t,x,bn);L.appendChild(r)});
+ const B=$('#mBan');B.innerHTML='';[...BAN].forEach(k=>{const c=document.createElement('button');c.className='btn';c.style.margin='6px 6px 0 0';c.textContent='✕ '+decodeURIComponent(k);c.title='Desbloquear';c.onclick=()=>F.remove(F.ref(db,'banned/'+k));B.appendChild(c)})}
+$('#mClear').onclick=()=>{if(!F)return toast('Chat no conectado');if(confirm('¿Vaciar todo el chat?'))F.remove(F.ref(db,'messages')).catch(()=>toast('Firebase no permite borrar (revisa las reglas)'))};
 $('#aExp').onclick=()=>{const t=JSON.stringify({mine:S.mine,names:S.names,favs:S.favs,imgs:S.imgs,hidden:S.hidden});navigator.clipboard.writeText(t).then(()=>toast('JSON copiado al portapapeles'),()=>prompt('Copia esto:',t))};
 $('#aImp').onclick=()=>{const t=prompt('Pega el JSON exportado:');if(!t)return;try{const o=JSON.parse(t);S.mine=o.mine||[];S.names=o.names||{};S.favs=o.favs||[];S.imgs=o.imgs||{};S.hidden=o.hidden||[];LS.s('imgs',S.imgs);LS.s('hidden',S.hidden);LS.s('mine',S.mine);LS.s('names',S.names);LS.s('favs',S.favs);render();adminList();toast('Importado')}catch(e){toast('JSON no válido')}};
 
@@ -425,7 +491,7 @@ const ccol=n=>`hsl(${hue(n)} 65% 45%)`;
 function addMsg(d){const box=$('#chatmsgs'),e=box.querySelector('.cempty');if(e)e.remove();
  const u=String(d.u||'?').slice(0,16),mine=u===me,first=prev!==u;prev=u;
  const near=box.scrollHeight-box.scrollTop-box.clientHeight<140;
- const w=document.createElement('div');w.className='mg'+(mine?' me':'')+(first?' first':'');
+ const w=document.createElement('div');w.className='mg'+(mine?' me':'')+(first?' first':'');if(d.k)w.dataset.k=d.k;
  const av=document.createElement('div');av.className='mav';av.style.background=ccol(u);av.textContent=u[0].toUpperCase();
  if(mine)av.style.display='none';else if(!first)av.style.visibility='hidden';
  const col=document.createElement('div');
@@ -435,14 +501,20 @@ function addMsg(d){const box=$('#chatmsgs'),e=box.querySelector('.cempty');if(e)
  w.append(av,col);box.appendChild(w);while(box.children.length>60)box.removeChild(box.firstChild);
  if(near||mine)box.scrollTop=box.scrollHeight;
  if(ready&&!mine&&!$('#pChat').classList.contains('open')){unread++;$('#badge').textContent=unread;$('#badge').style.display='inline'}}
+let feedOn=false;const MSG=new Map(),BAN=new Set(),bk=n=>encodeURIComponent(String(n).toLowerCase()).replace(/\./g,'%2E');
+async function feed(){await fbReady;if(!db)return false;if(feedOn)return true;feedOn=true;
+ const{ref,onChildAdded,onChildRemoved,onValue,query,limitToLast}=F;
+ onChildAdded(query(ref(db,'messages'),limitToLast(60)),sn=>{const d=sn.val()||{};d.k=sn.key;MSG.set(sn.key,d);addMsg(d);modList()});
+ onChildRemoved(ref(db,'messages'),sn=>{MSG.delete(sn.key);const e=document.querySelector('.mg[data-k="'+sn.key+'"]');if(e)e.remove();modList()});
+ onValue(ref(db,'banned'),sn=>{BAN.clear();Object.keys(sn.val()||{}).forEach(k=>BAN.add(k));modList()});
+ setTimeout(()=>ready=true,1500);return true}
 async function chatStart(u){me=u;$('#chatAuth').style.display='none';$('#chatMain').style.display='flex';$('#cMe').textContent=u;
- const box=$('#chatmsgs');if(!box.children.length)box.innerHTML='<div class="cempty">Conectando…</div>';
- await fbReady;if(chatOn)return;
- if(!db){box.innerHTML='<div class="cempty">No se pudo conectar con el chat.<br>Comprueba tu conexión.</div>';return}
- chatOn=true;box.innerHTML='<div class="cempty">Aún no hay mensajes.<br>Escribe el primero 👋</div>';
- const{ref,push,onChildAdded,query,limitToLast,serverTimestamp}=F;
- onChildAdded(query(ref(db,'messages'),limitToLast(40)),sn=>addMsg(sn.val()||{}));setTimeout(()=>ready=true,1500);
- const send=()=>{const i=$('#cIn'),v=i.value.trim();if(!v||Date.now()-last<800)return;last=Date.now();push(ref(db,'messages'),{u:me,t:v.slice(0,300),s:serverTimestamp()}).catch(()=>toast('No se pudo enviar'));i.value='';i.focus()};
+ const box=$('#chatmsgs');if(!box.querySelector('.mg'))box.innerHTML='<div class="cempty">Conectando…</div>';
+ if(!await feed()){box.innerHTML='<div class="cempty">No se pudo conectar con el chat.<br>Comprueba tu conexión.</div>';return}
+ const r=ready;ready=false;box.innerHTML='';prev=null;MSG.forEach(d=>addMsg(d));ready=r;
+ if(!box.querySelector('.mg'))box.innerHTML='<div class="cempty">Aún no hay mensajes.<br>Escribe el primero 👋</div>';
+ box.scrollTop=box.scrollHeight;const{ref,push,serverTimestamp}=F;
+ const send=()=>{const i=$('#cIn'),v=i.value.trim();if(!v||Date.now()-last<800)return;if(BAN.has(bk(me)))return toast('Un administrador te ha bloqueado del chat');last=Date.now();push(ref(db,'messages'),{u:me,t:v.slice(0,300),s:serverTimestamp()}).catch(()=>toast('No se pudo enviar'));i.value='';i.focus()};
  $('#cIn').onkeydown=e=>{if(e.key==='Enter')send()};$('#cSend').onclick=send}
 $$('.emo button').forEach(b=>b.onclick=()=>{const i=$('#cIn');i.value+=b.textContent;i.focus()});
 $('#cUser').oninput=e=>{const v=e.target.value.trim(),a=$('#cAv');a.textContent=(v[0]||'?').toUpperCase();a.style.background=v?ccol(v):'';a.style.transform='scale(1.08)';setTimeout(()=>a.style.transform='',150)};
